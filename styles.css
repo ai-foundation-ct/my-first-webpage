@@ -1,0 +1,196 @@
+/* CSS Variables for DRY principles */
+:root {
+    --primary-blue: #0057e7;
+    --primary-blue-hover: #0066ff;
+    --animation-duration: 1.2s;
+    --transition-speed: 0.3s;
+    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base reset and body styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #1a1a2e;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Hero container */
+.hero-container {
+    text-align: center;
+    max-width: 900px;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Hero title styling */
+.hero-title {
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 900;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+/* Title word animation - API Contract: wordRevealAnimation */
+.title-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(50px) rotateX(90deg);
+    animation: wordReveal 0.8s var(--ease-out) forwards;
+}
+
+.title-word:nth-child(1) { animation-delay: var(--transition-speed); }
+.title-word:nth-child(2) { animation-delay: 0.6s; }
+.title-word:nth-child(3) { animation-delay: 0.9s; }
+.title-word:nth-child(4) { animation-delay: var(--animation-duration); }
+
+/* CTA button styling */
+.cta-button {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(45deg, var(--primary-blue), #00a8ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: buttonPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.5s forwards;
+    transition: all var(--transition-speed) ease;
+}
+
+/* Button shimmer effect */
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+/* Button hover effects - meets AC-002 requirements */
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 15px 35px rgba(0, 87, 231, 0.4),
+        0 5px 15px rgba(0, 168, 255, 0.3),
+        inset 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.cta-button:focus {
+    outline: none;
+    box-shadow: 
+        0 15px 35px rgba(0, 87, 231, 0.4),
+        0 5px 15px rgba(0, 168, 255, 0.3),
+        0 0 0 4px rgba(0, 168, 255, 0.5);
+}
+
+/* Background particles container */
+.background-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Particle styling and animation - API Contract: particleFloatAnimation */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(0, 168, 255, 0.6);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+.particle:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
+.particle:nth-child(4) { top: 30%; left: 90%; animation-delay: 1s; }
+.particle:nth-child(5) { top: 70%; left: 5%; animation-delay: 3s; }
+
+/* Keyframe animations */
+@keyframes wordReveal {
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+@keyframes buttonPop {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Reduced motion support - AC-005 compliance */
+@media (prefers-reduced-motion: reduce) {
+    .title-word {
+        animation: fadeInSimple 0.6s ease-out forwards;
+    }
+    
+    .cta-button {
+        animation: fadeInSimple 0.6s ease-out 1.5s forwards;
+        transform: none;
+    }
+    
+    .particle {
+        animation: none;
+    }
+    
+    .cta-button:hover {
+        transform: none;
+    }
+}
+
+@keyframes fadeInSimple {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Mobile responsiveness - AC-004 compliance */
+@media (max-width: 768px) {
+    .hero-container {
+        padding: 1rem;
+    }
+    
+    .cta-button {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+    
+    .particle {
+        display: none;
+    }
+}
